@@ -1,0 +1,47 @@
+name: Deploy Prefect Flow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        id: build-docker-image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: my-example-image:my-tag
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy a Prefect flow
+        uses: PrefectHQ/actions-prefect-deploy@v4.2.0
+        with:
+          deployment-names: version-testing
+          deployment-file-path: ./prefect.yaml
+          requirements-file-paths: ./requirements.txt
+        env:
+          IMAGE_DIGEST: ${{ steps.build-docker-image.outputs.digest }}
+          PREFECT_API_KEY: ${{ secrets.PREFECT_API_KEY }}
+          PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
