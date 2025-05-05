@@ -29,6 +29,6 @@ deployments:
   work_pool:
     name: versioning
     job_variables:
-      image: "my-example-image@{{ $IMAGE_DIGEST }}"
+      image: "kevingrismoreprefect/my-example-image@{{ $IMAGE_DIGEST }}"
     work_queue_name: null
   schedules: []

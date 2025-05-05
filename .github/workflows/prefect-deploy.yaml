@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: my-example-image:my-tag
+          tags: kevingrismoreprefect/my-example-image:my-tag
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
