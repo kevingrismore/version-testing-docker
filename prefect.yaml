@@ -27,7 +27,7 @@ deployments:
   entrypoint: flow.py:my_flow
   parameters: {}
   work_pool:
-    name: versioning
+    name: docker
     job_variables:
       image: "kevingrismoreprefect/my-example-image@{{ $IMAGE_DIGEST }}"
     work_queue_name: null
