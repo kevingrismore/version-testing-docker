@@ -1,7 +1,4 @@
-import os
-
 from prefect import flow
-from prefect.runner.storage import GitRepository
 
 @flow(log_prints=True)
 def my_flow():
